@@ -1,5 +1,9 @@
 #Functions to be used in package
 
+#ChatGPT link used by LP: https://chat.openai.com/c/99d38f73-c5da-49d0-82b8-2e8a8cbd5713
+
+
+
 
 #Estimating Coefficients
 
