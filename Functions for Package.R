@@ -55,3 +55,72 @@ plot_logistic_curve <- function(X, y, beta) {
   points(X, y)
 }
 
+
+# Function to calculate the confusion matrix
+calculate_confusion_matrix <- function(y, predictions) {
+  confusion_matrix <- table(y, predictions)
+  return(confusion_matrix)
+}
+
+
+# Function to calculate prevalence
+calculate_prevalence <- function(y) {
+  prevalence <- sum(y) / length(y)
+  return(prevalence)
+}
+
+# Function to calculate accuracy
+calculate_accuracy <- function(confusion_matrix) {
+  accuracy <- (sum(diag(confusion_matrix))) / length(confusion_matrix)
+  return(accuracy)
+}
+
+# Function to calculate sensitivity
+calculate_sensitivity <- function(confusion_matrix) {
+  sensitivity <- confusion_matrix[1, 1] / (sum(confusion_matrix[1, ]))
+  return(sensitivity)
+}
+
+# Function to calculate specificity
+calculate_specificity <- function(confusion_matrix) {
+  specificity <- confusion_matrix[2, 2] / (sum(confusion_matrix[2, ]))
+  return(specificity)
+}
+
+# Function to calculate false discovery rate
+calculate_false_discovery_rate <- function(confusion_matrix) {
+  false_discovery_rate <- confusion_matrix[0, 1] / (sum(confusion_matrix[0, ]))
+  return(false_discovery_rate)
+}
+
+# Function to calculate diagnostic odds ratio
+calculate_diagnostic_odds_ratio <- function(sensitivity, specificity) {
+  diagnostic_odds_ratio <- (sensitivity / (1 - specificity)) / ((1 - sensitivity) / specificity)
+  return(diagnostic_odds_ratio)
+}
+
+# Function to plot metrics over a grid of cutoff values
+plot_metrics_over_cutoff_values <- function(fitted_probabilities, y, cutoff_values) {
+  metrics <- matrix(nrow = length(cutoff_values), ncol = 6)
+  for (i in 1:length(cutoff_values)) {
+    cutoff <- cutoff_values[i]
+    predictions <- ifelse(fitted_probabilities > cutoff, 1, 0)
+    confusion_matrix <- calculate_confusion_matrix(y, predictions)
+    metrics[i, ] <- c(
+      calculate_prevalence(y),
+      calculate_accuracy(confusion_matrix),
+      calculate_sensitivity(confusion_matrix),
+      calculate_specificity(confusion_matrix),
+      calculate_false_discovery_rate(confusion_matrix),
+      calculate_diagnostic_odds_ratio(calculate_sensitivity(confusion_matrix), calculate_specificity(confusion_matrix))
+    )
+  }
+  
+  plot(cutoff_values, metrics[, 2], type = "l", col = "blue", xlab = "Cutoff Value", ylab = "Accuracy")
+  lines(cutoff_values, metrics[, 3], type = "l", col = "green")
+  lines(cutoff_values, metrics[, 4], type = "l", col = "red")
+  legend("topright", c("Accuracy", "Sensitivity", "Specificity"), col = c("blue", "green", "red"))
+}
+
+
+# Reference: https://bard.google.com/chat/139b518c839ed4ce
