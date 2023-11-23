@@ -1,6 +1,6 @@
 #Functions to be used in package
 
-#ChatGPT link used by LP: https://chat.openai.com/c/99d38f73-c5da-49d0-82b8-2e8a8cbd5713
+#ChatGPT link used by LP: https://chat.openai.com/share/b8d5f017-78ac-40b2-8a5e-a8b171d6d440
 #Reference Used by Felix: https://bard.google.com/chat/139b518c839ed4ce
 
 #Estimating Coefficients
@@ -251,6 +251,12 @@ plot_selected_metrics_over_cutoffs <- function(fitted_probabilities, y, selected
   }
   legend("topright", legend = selected_metrics, col = 1:length(selected_metrics), lty = 1)
 }
+
+
+
+
+
+
 
 ################################################################################
 #Test functions defined above
