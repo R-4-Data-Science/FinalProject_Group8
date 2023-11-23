@@ -1,10 +1,24 @@
-#Functions to be used in package
+#Functions to be used in package with roxygen2 help documentation
 
-#ChatGPT link used by LP: https://chat.openai.com/share/b8d5f017-78ac-40b2-8a5e-a8b171d6d440
+library(roxygen2)
+
+#ChatGPT link used by LP: https://chat.openai.com/share/d8ac752b-0e57-4b5f-99db-86cb1219e63d
 #Reference Used by Felix: https://bard.google.com/chat/139b518c839ed4ce
 
-#Estimating Coefficients
 
+#' Logistic Regression Using Numerical Optimization
+#'
+#' Performs logistic regression using numerical optimization without relying on existing logistic regression functions in R.
+#' @param X A matrix of predictor variables.
+#' @param y A vector of binary response variables.
+#' @param max_iter Maximum number of iterations for optimization (default: 100).
+#' @param tol Tolerance for convergence check (default: 1e-6).
+#' @return A list containing coefficients, log-likelihood, and number of iterations.
+#' @examples
+#' X <- matrix(rnorm(200), ncol = 2)
+#' y <- rbinom(100, 1, 0.5)
+#' result <- logistic_regression(X, y)
+#' @export
 logistic_regression <- function(X, y, max_iter = 100, tol = 1e-6) {
   if (!is.matrix(X) || length(y) != nrow(X)) {
     stop("Invalid inputs for X or y")
@@ -56,7 +70,17 @@ logistic_regression <- function(X, y, max_iter = 100, tol = 1e-6) {
 
 
 
-#Initial Values for Optimization
+#' Initial Values for Logistic Regression Optimization
+#'
+#' Computes the initial values for the optimization of logistic regression coefficients using least squares.
+#' @param X A matrix of predictor variables.
+#' @param y A vector of response variables.
+#' @return A vector of initial values for optimization.
+#' @examples
+#' X <- matrix(rnorm(200), ncol = 2)
+#' y <- rbinom(100, 1, 0.5)
+#' init_vals <- initial_values(X, y)
+#' @export
 initial_values <- function(X, y) {
   X <- as.matrix(cbind(1, X)) # Add intercept
   
@@ -72,7 +96,19 @@ initial_values <- function(X, y) {
 }
 
 
-#Bootstrap confidence intervals
+#' Bootstrap Confidence Intervals for Logistic Regression
+#'
+#' Calculates bootstrap confidence intervals for logistic regression coefficients.
+#' @param X A matrix of predictor variables.
+#' @param y A vector of response variables.
+#' @param alpha Significance level for confidence intervals (default: 0.05).
+#' @param n_bootstraps Number of bootstrap samples (default: 20).
+#' @return A list containing lower and upper confidence intervals.
+#' @examples
+#' X <- matrix(rnorm(200), ncol = 2)
+#' y <- rbinom(100, 1, 0.5)
+#' ci <- bootstrap_ci(X, y)
+#' @export
 bootstrap_ci <- function(X, y, alpha = 0.05, n_bootstraps = 20) {
   # Input validation
   if (!is.matrix(X) || length(y) != nrow(X)) {
@@ -107,7 +143,19 @@ bootstrap_ci <- function(X, y, alpha = 0.05, n_bootstraps = 20) {
 
 
 
-#Plot of the fitted logistic curve
+#' Plot the Fitted Logistic Regression Curve
+#'
+#' Plots the logistic regression curve based on fitted model coefficients.
+#' @param X A matrix of predictor variables.
+#' @param y A vector of response variables (binary).
+#' @param beta A vector of estimated coefficients from logistic regression.
+#' @param predictor_index Index of the predictor to be used for plotting (default: 1).
+#' @examples
+#' X <- matrix(rnorm(200), ncol = 2)
+#' y <- rbinom(100, 1, 0.5)
+#' beta <- logistic_regression(X, y)$coefficients
+#' plot_logistic_curve(X, y, beta)
+#' @export
 plot_logistic_curve <- function(X, y, beta, predictor_index = 1) {
   if (!is.matrix(X) || length(y) != nrow(X)) {
     stop("Invalid inputs for X or y")
@@ -135,7 +183,17 @@ plot_logistic_curve <- function(X, y, beta, predictor_index = 1) {
 
 
 
-
+#' Calculate the Confusion Matrix
+#'
+#' Computes the confusion matrix for binary classification predictions.
+#' @param y True binary responses.
+#' @param predictions Binary predictions from the model.
+#' @return A confusion matrix.
+#' @examples
+#' true_values <- rbinom(100, 1, 0.5)
+#' predicted_values <- rbinom(100, 1, 0.5)
+#' conf_matrix <- calculate_confusion_matrix(true_values, predicted_values)
+#' @export
 # Function to calculate the confusion matrix
 calculate_confusion_matrix <- function(y, predictions) {
   confusion_matrix <- table(y, predictions)
@@ -145,7 +203,15 @@ calculate_confusion_matrix <- function(y, predictions) {
 
 
 
-# Function to calculate prevalence
+#' Calculate Prevalence
+#'
+#' Computes the prevalence of the positive class in binary response data.
+#' @param y Binary response vector.
+#' @return Prevalence value.
+#' @examples
+#' response <- rbinom(100, 1, 0.7)
+#' prevalence <- calculate_prevalence(response)
+#' @export
 calculate_prevalence <- function(y) {
   prevalence <- sum(y) / length(y)
   return(prevalence)
@@ -153,7 +219,17 @@ calculate_prevalence <- function(y) {
 
 
 
-# Function to calculate accuracy
+#' Calculate Accuracy of Predictions
+#'
+#' Computes the accuracy from the confusion matrix for binary classification.
+#' @param confusion_matrix A confusion matrix from binary classification predictions.
+#' @return Accuracy value.
+#' @examples
+#' predictions <- rbinom(100, 1, 0.5)
+#' true_labels <- rbinom(100, 1, 0.5)
+#' conf_matrix <- calculate_confusion_matrix(true_labels, predictions)
+#' accuracy <- calculate_accuracy(conf_matrix)
+#' @export
 calculate_accuracy <- function(confusion_matrix) {
   # Ensure matrix has the correct dimensions
   if (!is.matrix(confusion_matrix) || nrow(confusion_matrix) != 2 || ncol(confusion_matrix) != 2) {
@@ -164,7 +240,17 @@ calculate_accuracy <- function(confusion_matrix) {
 }
 
 
-
+#' Calculate Sensitivity
+#'
+#' Computes sensitivity from the confusion matrix for binary classification.
+#' @param confusion_matrix A confusion matrix from binary classification predictions.
+#' @return Sensitivity value.
+#' @examples
+#' predictions <- rbinom(100, 1, 0.5)
+#' true_labels <- rbinom(100, 1, 0.5)
+#' conf_matrix <- calculate_confusion_matrix(true_labels, predictions)
+#' sensitivity <- calculate_sensitivity(conf_matrix)
+#' @export
 # Function to calculate sensitivity
 calculate_sensitivity <- function(confusion_matrix) {
   sensitivity <- confusion_matrix[2, 2] / sum(confusion_matrix[2, ])
@@ -173,7 +259,17 @@ calculate_sensitivity <- function(confusion_matrix) {
 
 
 
-# Function to calculate specificity
+#' Calculate Specificity
+#'
+#' Computes specificity from the confusion matrix for binary classification.
+#' @param confusion_matrix A confusion matrix from binary classification predictions.
+#' @return Specificity value.
+#' @examples
+#' predictions <- rbinom(100, 1, 0.5)
+#' true_labels <- rbinom(100, 1, 0.5)
+#' conf_matrix <- calculate_confusion_matrix(true_labels, predictions)
+#' specificity <- calculate_specificity(conf_matrix)
+#' @export
 calculate_specificity <- function(confusion_matrix) {
   # Checking the structure of the confusion matrix
   if (!is.matrix(confusion_matrix) || nrow(confusion_matrix) != 2 || ncol(confusion_matrix) != 2) {
@@ -193,7 +289,17 @@ calculate_specificity <- function(confusion_matrix) {
 
 
 
-# Function to calculate false discovery rate
+#' Calculate False Discovery Rate
+#'
+#' Computes the false discovery rate from the confusion matrix for binary classification.
+#' @param confusion_matrix A confusion matrix from binary classification predictions.
+#' @return False Discovery Rate value.
+#' @examples
+#' predictions <- rbinom(100, 1, 0.5)
+#' true_labels <- rbinom(100, 1, 0.5)
+#' conf_matrix <- calculate_confusion_matrix(true_labels, predictions)
+#' fdr <- calculate_false_discovery_rate(conf_matrix)
+#' @export
 calculate_false_discovery_rate <- function(confusion_matrix) {
   if (sum(confusion_matrix[, 2]) == 0) {
     return(NA) # Avoid division by zero
@@ -204,7 +310,17 @@ calculate_false_discovery_rate <- function(confusion_matrix) {
 
 
 
-# Function to calculate diagnostic odds ratio
+#' Calculate Diagnostic Odds Ratio
+#'
+#' Computes the diagnostic odds ratio from the confusion matrix for binary classification.
+#' @param confusion_matrix A confusion matrix from binary classification predictions.
+#' @return Diagnostic Odds Ratio value.
+#' @examples
+#' predictions <- rbinom(100, 1, 0.5)
+#' true_labels <- rbinom(100, 1, 0.5)
+#' conf_matrix <- calculate_confusion_matrix(true_labels, predictions)
+#' dor <- calculate_diagnostic_odds_ratio(conf_matrix)
+#' @export
 calculate_diagnostic_odds_ratio <- function(confusion_matrix) {
   TP <- confusion_matrix[2, 2]
   TN <- confusion_matrix[1, 1]
@@ -220,7 +336,16 @@ calculate_diagnostic_odds_ratio <- function(confusion_matrix) {
 }
 
 
-# Function to plot metrics over a grid of cutoff values
+#' Plot Selected Metrics Over Various Cutoff Values
+#'
+#' Plots selected metrics (e.g., accuracy, sensitivity) evaluated over a range of cutoff values.
+#' @param fitted_probabilities Predicted probabilities from the logistic regression model.
+#' @param y True binary responses.
+#' @param selected_metrics A vector of selected metric names to plot.
+#' @examples
+#' fitted_probs <- logistic_regression(X, y)$fitted_values
+#' plot_selected_metrics_over_cutoffs(fitted_probs, y, c("Accuracy", "Sensitivity"))
+#' @export
 plot_selected_metrics_over_cutoffs <- function(fitted_probabilities, y, selected_metrics) {
   cutoff_values <- seq(0.1, 0.9, by = 0.1)  # Generate cutoff values
   metrics <- matrix(nrow = length(cutoff_values), ncol = 6)
@@ -330,3 +455,4 @@ for (metric in metrics_names) {
   print(paste("Plotting", metric))
   plot_selected_metrics_over_cutoffs(fitted_probabilities, y, metric)
 }
+
