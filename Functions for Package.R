@@ -6,6 +6,13 @@ library(roxygen2)
 #Reference Used by Felix: https://bard.google.com/chat/139b518c839ed4ce
 
 
+
+
+################################################################################
+#FUNCTIONS
+################################################################################
+
+
 #' Logistic Regression Using Numerical Optimization
 #'
 #' Performs logistic regression using numerical optimization without relying on existing logistic regression functions in R.
