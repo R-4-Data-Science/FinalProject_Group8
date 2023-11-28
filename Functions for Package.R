@@ -395,7 +395,7 @@ plot_selected_metrics_over_cutoffs <- function(fitted_probabilities, y, selected
 ################################################################################
 # Generate a synthetic dataset
 set.seed(123)  # For reproducibility
-n <- 100       # Number of observations
+n <- 300       # Number of observations
 p <- 2         # Number of predictors
 
 # Generating predictors
@@ -408,10 +408,10 @@ logits <- cbind(1, X) %*% beta_true
 prob <- 1 / (1 + exp(-logits))
 y <- rbinom(n, 1, prob)
 
-# Testing logistic_regression
+# Testing logistic_regression 
 logistic_model <- logistic_regression(X, y)
 print("Logistic Regression Model:")
-print(logistic_model)
+print(logistic_model) #$coefficients represents estimated betas
 
 # Testing initial_values
 initial_beta <- initial_values(X, y)
