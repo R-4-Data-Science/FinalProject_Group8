@@ -1,0 +1,37 @@
+
+---
+title: "My R Markdown Document"
+author: "Your Name"
+date: "2023-11-29"
+output: html_document
+---
+
+Group 8-  Final Project 
+  
+Logistic Regression Package Vignette
+
+
+Overview
+
+This R package provides a set of functions for performing logistic regression, evaluating model performance, and visualizing results. The package is designed to be user-friendly, allowing users to perform logistic regression without relying on existing functions in R. Additionally, it includes tools for computing bootstrap confidence intervals, plotting the logistic regression curve, calculating confusion matrices, and more.
+
+Installation
+
+To install the package, you can use the following commands:
+
+
+```{r eval=FALSE}
+
+# Install devtools if not already installed
+if (!require(devtools)) install.packages("devtools")
+
+# Install the logistic_regression package
+devtools::install_github("your_github_username/logistic_regression_package")
+
+```
+
+Functions <span style="font-weight: bold;">This is a Bold Heading</span>
+
+
+logistic_regression
+This function performs logistic regression using numerical optimization. Users can input a matrix of predictor variables (X) and a vector of binary response variables (y). Additional parameters include max_iter for the maximum number of iterations and tol for the convergence tolerance.
