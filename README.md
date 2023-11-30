@@ -3,18 +3,45 @@ Logistic Regression Package - Group 8
 Lucas Parvin, Priyadarshni Jitendrabhai Patel, & Felix Satognon
 2023-11-30
 
+ChatGPT was utilized in the creation of this package: INSERT LINK GitHub
+Repository Link: INSERT LINK **This package’s website can be viewed
+here:** INSERT LINK
+
 # Project 8 Final Project Package
+
+## Accessing The Package
+
+1.  To install the package, you must first install “devtools” if you
+    have not already: `install.packages("devtools")`
+2.  Load devtools using: `library(devtools)`
+3.  Now run
+    `devtools::install_github("R-4-Data-Science/FinalProject_Group8")`
+
+Finally, load our package:
+
+``` r
+library(package8)
+```
 
 ## How Our Package Works:
 
-To install the package
+Generate Synthetic Dataset Before we start using the functions, let’s
+generate a synthetic dataset for our examples.
 
 ``` r
-#install.packages("devtools")
+set.seed(123)  # For reproducibility
+n <- 300       # Number of observations
+p <- 2         # Number of predictors
 
-#devtools::install_github("R-4-Data-Science/FinalProject_Group8")
+# Generating predictors
+X <- matrix(rnorm(n * p), ncol = p)
+colnames(X) <- c("Predictor1", "Predictor2")
 
-library(package8)
+# Generating response
+beta_true <- c(-0.5, 0.75, 1.25) # True coefficients including intercept
+logits <- cbind(1, X) %*% beta_true
+prob <- 1 / (1 + exp(-logits))
+y <- rbinom(n, 1, prob)
 ```
 
 ### Logistic Regression Using Numerical Optimization
@@ -25,71 +52,188 @@ It does not rely on existing logistic regression functions in R.
 #### Example Usage
 
 ``` r
-# Generating sample data
-X <- matrix(rnorm(200), ncol = 2)
-y <- rbinom(100, 1, 0.5)
-
-# Performing logistic regression
-result <- logistic_regression(X, y)
+logistic_model <- logistic_regression(X, y)
 ```
 
-    ## Convergence achieved after 4 iterations.
+    ## Convergence achieved after 6 iterations.
 
 ``` r
-print(result)
+print("Logistic Regression Model:")
+```
+
+    ## [1] "Logistic Regression Model:"
+
+``` r
+print(logistic_model)
 ```
 
     ## $coefficients
-    ##              [,1]
-    ## [1,] -0.001592916
-    ## [2,]  0.042174127
-    ## [3,] -0.099630151
+    ##                  [,1]
+    ##            -0.5161166
+    ## Predictor1  0.8140113
+    ## Predictor2  1.5253934
     ## 
     ## $log_likelihood
-    ## [1] -69.15602
+    ## [1] -149.1057
     ## 
     ## $iterations
-    ## [1] 4
+    ## [1] 6
+
+Initial Values for Logistic Regression Optimization This function
+computes the initial values for the optimization of logistic regression
+coefficients using the least squares method.
+
+Example Usage
 
 ``` r
-#NOTES
-# Don't include any code
-
-#Having saved this file within the main folder of your package, you can compile this document using the pkgdown package (this can be installed by executing the following command in your console: devtools::install_github("hadley/pkgdown")). When the latter package is installed and loaded, all you need to do is execute the command pkgdown::build_site() to obtain the following web-page:
-
-# Include link to website after it has been created
-
-# Follow all steps in section 8.1
-
-# Only include descriptions of funIctions that user will use.
-
-#Overview
-
-#This R package provides a set of functions for performing logistic regression, evaluating model performance, and visualizing results. The package is designed to be user-friendly, allowing users to perform logistic regression without relying on existing functions in R. Additionally, it includes tools for computing bootstrap confidence intervals, plotting the logistic regression curve, calculating confusion matrices, and more.
-
-#Functions
-
-#logistic_regression
-
-
-#This function performs logistic regression using numerical optimization. Users can input a matrix of predictor variables (X) and a vector of binary response variables (y). Additional parameters include max_iter for the maximum number of iterations and tol for the convergence tolerance.
-
-
-
-#initial_values
-
-#Computes the initial values for logistic regression optimization using least squares. Users provide a matrix of predictor variables (X) and a vector of response variables (y).
-
-#bootstrap_ci
-
-#Calculates bootstrap confidence intervals for logistic regression coefficients. Users input a matrix of predictor variables (X), a vector of response variables (y), and optional parameters alpha for the significance level and n_bootstraps for the number of bootstrap samples.
-
-
-#plot_logistic_curve
-
-#Plots the logistic regression curve based on fitted model coefficients. Users provide a matrix of predictor variables (X), a vector of response variables (y), and the estimated coefficients from logistic regression (beta).
-
-#calculate_confusion_matrix
-
-#Computes the confusion matrix for binary classification predictions. Users input true binary responses (y) and predicted values (predictions).
+initial_beta <- initial_values(X, y)
+print("Initial Coefficients:")
 ```
+
+    ## [1] "Initial Coefficients:"
+
+``` r
+print(initial_beta)
+```
+
+    ##                 [,1]
+    ##            0.4161470
+    ## Predictor1 0.1424676
+    ## Predictor2 0.2502480
+
+Bootstrap Confidence Intervals This function calculates bootstrap
+confidence intervals for logistic regression coefficients.
+
+Example Usage
+
+``` r
+ci <- bootstrap_ci(X, y)
+```
+
+    ## Convergence achieved after 6 iterations.
+
+    ## Convergence achieved after 7 iterations.
+
+    ## Convergence achieved after 6 iterations.
+    ## Convergence achieved after 6 iterations.
+    ## Convergence achieved after 6 iterations.
+    ## Convergence achieved after 6 iterations.
+    ## Convergence achieved after 6 iterations.
+    ## Convergence achieved after 6 iterations.
+    ## Convergence achieved after 6 iterations.
+    ## Convergence achieved after 6 iterations.
+    ## Convergence achieved after 6 iterations.
+
+    ## Convergence achieved after 7 iterations.
+    ## Convergence achieved after 7 iterations.
+
+    ## Convergence achieved after 6 iterations.
+    ## Convergence achieved after 6 iterations.
+    ## Convergence achieved after 6 iterations.
+    ## Convergence achieved after 6 iterations.
+    ## Convergence achieved after 6 iterations.
+    ## Convergence achieved after 6 iterations.
+    ## Convergence achieved after 6 iterations.
+
+``` r
+print("Bootstrap Confidence Intervals:")
+```
+
+    ## [1] "Bootstrap Confidence Intervals:"
+
+``` r
+print(ci)
+```
+
+    ## $lower
+    ## [1] -0.7742180  0.5961866  1.2757898
+    ## 
+    ## $upper
+    ## [1] -0.4117711  1.2630490  1.9080036
+
+Plotting the Fitted Logistic Regression Curve This function plots the
+logistic regression curve based on fitted model coefficients.
+
+Example Usage
+
+``` r
+# Plotting the logistic curve
+plot_logistic_curve(X, y, logistic_model$coefficients, predictor_index = 1)
+```
+
+![](README_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+Confusion Matrix and Metrics Calculate and display the confusion matrix
+and various metrics.
+
+Example Usage
+
+``` r
+fitted_probabilities <- 1 / (1 + exp(-cbind(1, X) %*% logistic_model$coefficients))
+conf_matrix <- calculate_confusion_matrix(y, ifelse(fitted_probabilities > 0.5, 1, 0))
+print("Confusion Matrix:")
+```
+
+    ## [1] "Confusion Matrix:"
+
+``` r
+print(conf_matrix)
+```
+
+    ##    predictions
+    ## y     0   1
+    ##   0 141  32
+    ##   1  43  84
+
+``` r
+metrics_list <- list(
+  prevalence = calculate_prevalence(y),
+  accuracy = calculate_accuracy(conf_matrix),
+  sensitivity = calculate_sensitivity(conf_matrix),
+  specificity = calculate_specificity(conf_matrix),
+  false_discovery_rate = calculate_false_discovery_rate(conf_matrix),
+  diagnostic_odds_ratio = calculate_diagnostic_odds_ratio(conf_matrix)
+)
+
+print("Metrics:")
+```
+
+    ## [1] "Metrics:"
+
+``` r
+print(metrics_list)
+```
+
+    ## $prevalence
+    ## [1] 0.4233333
+    ## 
+    ## $accuracy
+    ## [1] 0.75
+    ## 
+    ## $sensitivity
+    ## [1] 0.6614173
+    ## 
+    ## $specificity
+    ## [1] 0.8150289
+    ## 
+    ## $false_discovery_rate
+    ## [1] 0.2758621
+    ## 
+    ## $diagnostic_odds_ratio
+    ## [1] 8.607558
+
+### Plot Selected Metrics Over Various Cutoff Values
+
+This function plots selected metrics (e.g., accuracy, sensitivity)
+evaluated over a range of cutoff values.
+
+#### Example Usage
+
+``` r
+metrics_names <- c("Prevalence", "Accuracy", "Sensitivity", "Specificity", "False Discovery Rate", "Diagnostic Odds Ratio")
+for (metric in metrics_names) {
+  plot_selected_metrics_over_cutoffs(fitted_probabilities, y, metric)
+}
+```
+
+![](README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->![](README_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->![](README_files/figure-gfm/unnamed-chunk-8-3.png)<!-- -->![](README_files/figure-gfm/unnamed-chunk-8-4.png)<!-- -->![](README_files/figure-gfm/unnamed-chunk-8-5.png)<!-- -->![](README_files/figure-gfm/unnamed-chunk-8-6.png)<!-- -->
