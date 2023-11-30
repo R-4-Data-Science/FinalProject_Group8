@@ -7,12 +7,49 @@ Lucas Parvin, Priyadarshni Jitendrabhai Patel, & Felix Satognon
 
 ## How Our Package Works:
 
+To install the package
+
+``` r
+#install.packages("devtools")
+
+#devtools::install_github("R-4-Data-Science/FinalProject_Group8")
+
+library(package8)
+```
+
 ### Logistic Regression Using Numerical Optimization
 
 This function performs logistic regression using numerical optimization.
 It does not rely on existing logistic regression functions in R.
 
 #### Example Usage
+
+``` r
+# Generating sample data
+X <- matrix(rnorm(200), ncol = 2)
+y <- rbinom(100, 1, 0.5)
+
+# Performing logistic regression
+result <- logistic_regression(X, y)
+```
+
+    ## Convergence achieved after 4 iterations.
+
+``` r
+print(result)
+```
+
+    ## $coefficients
+    ##              [,1]
+    ## [1,] -0.001592916
+    ## [2,]  0.042174127
+    ## [3,] -0.099630151
+    ## 
+    ## $log_likelihood
+    ## [1] -69.15602
+    ## 
+    ## $iterations
+    ## [1] 4
 
 ``` r
 #NOTES

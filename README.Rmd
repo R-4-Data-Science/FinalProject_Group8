@@ -9,6 +9,16 @@ output: github_document
   
 ## How Our Package Works:
 
+To install the package
+```{r}
+#install.packages("devtools")
+
+#devtools::install_github("R-4-Data-Science/FinalProject_Group8")
+
+library(package8)
+
+```
+
 ### Logistic Regression Using Numerical Optimization
 
 This function performs logistic regression using numerical optimization. It does not rely on existing logistic regression functions in R.
