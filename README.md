@@ -3,9 +3,12 @@ Logistic Regression Package - Group 8
 Lucas Parvin, Priyadarshni Jitendrabhai Patel, & Felix Satognon
 2023-11-30
 
-ChatGPT was utilized in the creation of this package: INSERT LINK GitHub
-Repository Link: INSERT LINK **This package’s website can be viewed
-here:** INSERT LINK
+- ChatGPT was utilized in the creation of this package:
+  <https://chat.openai.com/share/cbb8309e-df87-444a-974e-09e9f0cb91ff>
+- GitHub Repository Link:
+  <https://github.com/R-4-Data-Science/FinalProject_Group8>
+- **This package’s website can be viewed here:**
+  <https://r-4-data-science.github.io/FinalProject_Group8/>
 
 # Project 8 Final Project Package
 
