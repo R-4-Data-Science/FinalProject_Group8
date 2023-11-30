@@ -10,9 +10,9 @@ Lucas Parvin, Priyadarshni Jitendrabhai Patel, & Felix Satognon
 - **This package’s website can be viewed here:**
   <https://r-4-data-science.github.io/FinalProject_Group8/>
 
-# Project 8 Final Project Package
+# **Project 8 Final Project Package**
 
-## Accessing The Package
+## **Accessing The Package**
 
 1.  To install the package, you must first install “devtools” if you
     have not already: `install.packages("devtools")`
@@ -26,10 +26,10 @@ Finally, load our package:
 library(package8)
 ```
 
-## How Our Package Works:
+## **How Our Package Works:**
 
-Generate Synthetic Dataset Before we start using the functions, let’s
-generate a synthetic dataset for our examples.
+*Before we start using the functions, let’s generate a synthetic dataset
+on which we can test our functions.*
 
 ``` r
 set.seed(123)  # For reproducibility
@@ -47,24 +47,18 @@ prob <- 1 / (1 + exp(-logits))
 y <- rbinom(n, 1, prob)
 ```
 
-### Logistic Regression Using Numerical Optimization
+### **Logistic Regression Using Numerical Optimization `logistic_regression()`**
 
 This function performs logistic regression using numerical optimization.
 It does not rely on existing logistic regression functions in R.
 
-#### Example Usage
+##### *Example Usage*
 
 ``` r
 logistic_model <- logistic_regression(X, y)
 ```
 
     ## Convergence achieved after 6 iterations.
-
-``` r
-print("Logistic Regression Model:")
-```
-
-    ## [1] "Logistic Regression Model:"
 
 ``` r
 print(logistic_model)
@@ -82,11 +76,12 @@ print(logistic_model)
     ## $iterations
     ## [1] 6
 
-Initial Values for Logistic Regression Optimization This function
-computes the initial values for the optimization of logistic regression
-coefficients using the least squares method.
+### **Initial Values for Logistic Regression Optimization**
 
-Example Usage
+This function computes the initial values for the optimization of
+logistic regression coefficients using the least squares method.
+
+##### *Example Usage*
 
 ``` r
 initial_beta <- initial_values(X, y)
@@ -104,10 +99,12 @@ print(initial_beta)
     ## Predictor1 0.1424676
     ## Predictor2 0.2502480
 
-Bootstrap Confidence Intervals This function calculates bootstrap
-confidence intervals for logistic regression coefficients.
+### **Bootstrap Confidence Intervals**
 
-Example Usage
+This function calculates bootstrap confidence intervals for logistic
+regression coefficients.
+
+##### *Example Usage*
 
 ``` r
 ci <- bootstrap_ci(X, y)
@@ -154,10 +151,12 @@ print(ci)
     ## $upper
     ## [1] -0.4117711  1.2630490  1.9080036
 
-Plotting the Fitted Logistic Regression Curve This function plots the
-logistic regression curve based on fitted model coefficients.
+### **Plotting the Fitted Logistic Regression Curve**
 
-Example Usage
+This function plots the logistic regression curve based on fitted model
+coefficients.
+
+##### *Example Usage*
 
 ``` r
 # Plotting the logistic curve
@@ -166,10 +165,11 @@ plot_logistic_curve(X, y, logistic_model$coefficients, predictor_index = 1)
 
 ![](README_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
-Confusion Matrix and Metrics Calculate and display the confusion matrix
-and various metrics.
+### **Confusion Matrix and Metrics**
 
-Example Usage
+Calculate and display the confusion matrix and various metrics.
+
+##### *Example Usage*
 
 ``` r
 fitted_probabilities <- 1 / (1 + exp(-cbind(1, X) %*% logistic_model$coefficients))
@@ -225,12 +225,12 @@ print(metrics_list)
     ## $diagnostic_odds_ratio
     ## [1] 8.607558
 
-### Plot Selected Metrics Over Various Cutoff Values
+### **Plot Selected Metrics Over Various Cutoff Values**
 
 This function plots selected metrics (e.g., accuracy, sensitivity)
 evaluated over a range of cutoff values.
 
-#### Example Usage
+##### *Example Usage*
 
 ``` r
 metrics_names <- c("Prevalence", "Accuracy", "Sensitivity", "Specificity", "False Discovery Rate", "Diagnostic Odds Ratio")
