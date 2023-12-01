@@ -1,0 +1,141 @@
+---
+title: "Logistic Regression Package - Group 8"
+author: "Lucas Parvin, Priyadarshni Jitendrabhai Patel, & Felix Satognon "
+date: "`r Sys.Date()`"
+output: html_document
+---
++ ChatGPT was utilized in the creation of this package: https://chat.openai.com/share/cbb8309e-df87-444a-974e-09e9f0cb91ff
++ GitHub Repository Link: https://github.com/R-4-Data-Science/FinalProject_Group8
++ **This package's website can be viewed here:** https://r-4-data-science.github.io/FinalProject_Group8/
+
+
+# **Project 8 Final Project Package**
+
+## **Accessing The Package**
+
+1. Users need to install the "devtools" package first, if not already installed, using: `install.packages("devtools")`
+2. Once "devtools" is installed, it needs to be loaded into the R environment using: `library(devtools)`
+3. The final project package is hosted on GitHub. Users can install it using: `devtools::install_github("R-4-Data-Science/FinalProject_Group8")`
+
+**Finally, load our package:**
+
+```{r}
+library(package8)
+```
+
+  
+## **How Our Package Works:**
+
+*Before we start using the functions, let's generate a synthetic dataset on which we can test our functions.*
+
+```{r}
+set.seed(123)  # For reproducibility
+n <- 300       # Number of observations
+p <- 2         # Number of predictors
+
+# Generating predictors
+X <- matrix(rnorm(n * p), ncol = p)
+colnames(X) <- c("Predictor1", "Predictor2")
+
+# Generating response
+beta_true <- c(-0.5, 0.75, 1.25) # True coefficients including intercept
+logits <- cbind(1, X) %*% beta_true
+prob <- 1 / (1 + exp(-logits))
+y <- rbinom(n, 1, prob)
+```
+
+
+### **Logistic Regression Using Numerical Optimization: `logistic_regression()`**
+
+This function performs logistic regression using numerical optimization. It does not rely on existing logistic regression functions in R.This function is independent of existing logistic regression functions in R.
+
+##### *Example Usage*
+```{r}
+logistic_model <- logistic_regression(X, y)
+print(logistic_model)
+
+```
+##### *Interpretation*
+The above function yields estimated coefficients, log-likelihood, and the convergence iteration count. The coefficients indicate the influence of each predictor on the log odds of the outcome. A higher log-likelihood suggests a better model fit.
+
+
+### **Initial Values for Logistic Regression Optimization: `initial_values()`**
+The function above computes the initial values for the optimization of logistic regression coefficients using the least squares method.
+
+##### *Example Usage*
+```{r}
+initial_beta <- initial_values(X, y)
+print(initial_beta)# Obtain initial coefficients
+```
+##### *Interpretation*
+The function above provides starting coefficients for optimization, derived through a least squares method, impacting the function's convergence and efficacy.
+
+### **Bootstrap Confidence Intervals: `bootstrap_ci()`**
+This function calculates bootstrap confidence intervals for logistic regression coefficients.
+
+##### *Example Usage*
+```{r}
+ci <- suppressMessages(bootstrap_ci(X, y)) # You would just use bootstrap_ci(X, y). Messages suppressed here for concise documentation
+print(ci)
+```
+
+##### *Interpretation*
+The function above generates confidence intervals that estimate the variability of logistic regression coefficients, indicating the probable ranges of the true parameter values.
+
+
+### **Plotting the Fitted Logistic Regression Curve: `plot_logistic_curve()`**
+This function plots the logistic regression curve based on fitted model coefficients.
+
+##### *Example Usage*
+```{r}
+# Plotting the logistic curve
+plot_logistic_curve(X, y, logistic_model$coefficients, predictor_index = 1)
+```
+
+##### *Interpretation*
+The function above yields a plot that displays the relationship between predictors and the estimated outcome probability, aiding in understanding predictor impacts.
+
+
+### **Confusion Matrix and Metrics: `calculate_confusion_matrix()`**
+Calculate and display the confusion matrix and various metrics.
+
+##### *Example Usage*
+```{r}
+fitted_probabilities <- 1 / (1 + exp(-cbind(1, X) %*% logistic_model$coefficients))
+conf_matrix <- calculate_confusion_matrix(y, ifelse(fitted_probabilities > 0.5, 1, 0))
+print(conf_matrix)
+```
+##### **The Metrics:**
+###### **`calculate_prevalence()`, `calculate_accuracy()`, `calculate_sensitivity()`, `calculate_specificity()`, `calculate_false_discovery_rate()`, `calculate_diagnostic_odds_ratio()`**
+```{r}
+metrics_list <- list(
+  prevalence = calculate_prevalence(y),
+  accuracy = calculate_accuracy(conf_matrix),
+  sensitivity = calculate_sensitivity(conf_matrix),
+  specificity = calculate_specificity(conf_matrix),
+  false_discovery_rate = calculate_false_discovery_rate(conf_matrix),
+  diagnostic_odds_ratio = calculate_diagnostic_odds_ratio(conf_matrix)
+)
+
+print(metrics_list)
+```
+##### *Interpretation*
+The functions above generate a confusion matrix that contrasts the actual and predicted outcomes, assessing prediction accuracy. Metrics like prevalence, accuracy, sensitivity, and others offer a multi-faceted performance evaluation.
+
+
+### **Plot Selected Metrics Over Various Cutoff Values: `plot_selected_metrics_over_cutoffs()`**
+
+This function plots selected metrics (e.g., accuracy, sensitivity) evaluated over a range of cutoff values. It specifies metrics of interest, like prevalence or sensitivity, and visualize them over varying cutoff values.
+
+##### *Example Usage*
+```{r}
+metrics_names <- c("Prevalence", "Accuracy", "Sensitivity", "Specificity", "False Discovery Rate", "Diagnostic Odds Ratio")
+for (metric in metrics_names) {
+  plot_selected_metrics_over_cutoffs(fitted_probabilities, y, metric)
+}
+
+```
+
+##### *Interpretation*
+The plots generated by the function above demonstrate how different probability thresholds affect model performance metrics.
+
