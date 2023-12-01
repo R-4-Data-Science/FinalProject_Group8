@@ -30,18 +30,18 @@ logistic_regression <- function(X, y, max_iter = 100, tol = 1e-6) {
   if (!is.matrix(X) || length(y) != nrow(X)) {
     stop("Invalid inputs for X or y")
   }
-  
+
   n <- nrow(X)
   p <- ncol(X)
   X <- as.matrix(cbind(1, X))  # Add intercept
   beta <- rep(0, p + 1)        # Initial coefficients
   log_likelihood_prev <- -Inf
-  
+
   for (i in 1:max_iter) {
     p_hat <- 1 / (1 + exp(-X %*% beta))
     W <- diag(as.vector(p_hat * (1 - p_hat)))
     z <- X %*% beta + (y - p_hat) / (p_hat * (1 - p_hat))
-    
+
     # Handling potential singularity in the Hessian matrix
     tryCatch({
       Hessian <- t(X) %*% W %*% X
@@ -53,24 +53,24 @@ logistic_regression <- function(X, y, max_iter = 100, tol = 1e-6) {
       message("Error in matrix inversion: ", e$message)
       break
     })
-    
+
     # Log-Likelihood
     log_likelihood <- sum(y * log(p_hat) + (1 - y) * log(1 - p_hat))
-    
+
     # Convergence check
     if (abs(log_likelihood - log_likelihood_prev) < tol && sum(abs(beta_new - beta)) < tol) {
       message("Convergence achieved after ", i, " iterations.")
       break
     }
-    
+
     if (i == max_iter) {
       warning("Maximum number of iterations reached without convergence.")
     }
-    
+
     log_likelihood_prev <- log_likelihood
     beta <- beta_new
   }
-  
+
   return(list(coefficients = beta, log_likelihood = log_likelihood, iterations = i))
 }
 
@@ -79,7 +79,7 @@ logistic_regression <- function(X, y, max_iter = 100, tol = 1e-6) {
 
 #' Initial Values for Logistic Regression Optimization
 #'
-#' Computes the initial values for the optimization of logistic regression coefficients using least squares.
+#' Computes the initial values for the optimization of logistic regression coefficients using least-squares method.
 #' @param X A matrix of predictor variables.
 #' @param y A vector of response variables.
 #' @return A vector of initial values for optimization.
@@ -90,7 +90,7 @@ logistic_regression <- function(X, y, max_iter = 100, tol = 1e-6) {
 #' @export
 initial_values <- function(X, y) {
   X <- as.matrix(cbind(1, X)) # Add intercept
-  
+
   tryCatch({
     XtX <- t(X) %*% X
     if (det(XtX) == 0) {
@@ -127,11 +127,11 @@ bootstrap_ci <- function(X, y, alpha = 0.05, n_bootstraps = 20) {
   if (n_bootstraps <= 0) {
     stop("Number of bootstraps must be positive")
   }
-  
+
   # Initialize matrix to store bootstrap coefficients
   p <- ncol(X)
   bootstrapped_betas <- matrix(nrow = n_bootstraps, ncol = p + 1)
-  
+
   # Bootstrap procedure
   for (i in 1:n_bootstraps) {
     sample_indices <- sample(nrow(X), replace = TRUE)
@@ -139,11 +139,11 @@ bootstrap_ci <- function(X, y, alpha = 0.05, n_bootstraps = 20) {
     regression_result <- logistic_regression(X[sample_indices, ], y[sample_indices])
     bootstrapped_betas[i, ] <- regression_result$coefficients
   }
-  
+
   # Calculate confidence intervals
   lower <- apply(bootstrapped_betas, 2, quantile, probs = alpha / 2)
   upper <- apply(bootstrapped_betas, 2, quantile, probs = 1 - alpha / 2)
-  
+
   return(list(lower = lower, upper = upper))
 }
 
@@ -170,20 +170,20 @@ plot_logistic_curve <- function(X, y, beta, predictor_index = 1) {
   if (predictor_index > ncol(X)) {
     stop("Predictor index out of bounds")
   }
-  
+
   x_range <- range(X[, predictor_index])
   seq_x <- seq(from = x_range[1], to = x_range[2], length.out = 100)
-  
+
   # Using column means for other predictors
   X_means <- apply(X, 2, mean)
   X_temp <- matrix(X_means, nrow = 100, ncol = ncol(X), byrow = TRUE)
   X_temp[, predictor_index] <- seq_x
-  
+
   z <- cbind(1, X_temp) %*% beta
   p_hat <- 1 / (1 + exp(-z))
-  
+
   # Adjusting plot's y-axis to range from 0 to 1
-  plot(seq_x, p_hat, type = 'l', ylim = c(0, 1), col = 'blue', 
+  plot(seq_x, p_hat, type = 'l', ylim = c(0, 1), col = 'blue',
        xlab = names(X)[predictor_index], ylab = 'Predicted Probability')
   points(X[, predictor_index], y, col = 'red', pch = 20)
 }
@@ -282,14 +282,14 @@ calculate_specificity <- function(confusion_matrix) {
   if (!is.matrix(confusion_matrix) || nrow(confusion_matrix) != 2 || ncol(confusion_matrix) != 2) {
     stop("Invalid confusion matrix")
   }
-  
+
   TN <- confusion_matrix[1, 1]  # True Negatives
   FP <- confusion_matrix[1, 2]  # False Positives
-  
+
   if ((TN + FP) == 0) {
     return(NA)  # Avoid division by zero
   }
-  
+
   specificity <- TN / (TN + FP)
   return(specificity)
 }
@@ -333,11 +333,11 @@ calculate_diagnostic_odds_ratio <- function(confusion_matrix) {
   TN <- confusion_matrix[1, 1]
   FP <- confusion_matrix[1, 2]
   FN <- confusion_matrix[2, 1]
-  
+
   if (TP == 0 || TN == 0 || FP == 0 || FN == 0) {
     return(NA) # Avoid division by zero
   }
-  
+
   diagnostic_odds_ratio <- (TP / FN) / (FP / TN)
   return(diagnostic_odds_ratio)
 }
@@ -345,7 +345,7 @@ calculate_diagnostic_odds_ratio <- function(confusion_matrix) {
 
 #' Plot Selected Metrics Over Various Cutoff Values
 #'
-#' Plots selected metrics (e.g., accuracy, sensitivity) evaluated over a range of cutoff values.
+#' Plots selected metrics (i.e. Prevalence, Accuracy, Sensitivity, Specificity, False Discover Rate, Diagnostic Odds Ratio) evaluated over a range of cutoff values.
 #' @param fitted_probabilities Predicted probabilities from the logistic regression model.
 #' @param y True binary responses.
 #' @param selected_metrics A vector of selected metric names to plot.
@@ -357,12 +357,12 @@ plot_selected_metrics_over_cutoffs <- function(fitted_probabilities, y, selected
   cutoff_values <- seq(0.1, 0.9, by = 0.1)  # Generate cutoff values
   metrics <- matrix(nrow = length(cutoff_values), ncol = 6)
   colnames(metrics) <- c("Prevalence", "Accuracy", "Sensitivity", "Specificity", "False Discovery Rate", "Diagnostic Odds Ratio")
-  
+
   for (i in 1:length(cutoff_values)) {
     cutoff <- cutoff_values[i]
     predictions <- ifelse(fitted_probabilities > cutoff, 1, 0)
     confusion_matrix <- calculate_confusion_matrix(y, predictions)
-    
+
     metrics[i, ] <- c(
       calculate_prevalence(y),
       calculate_accuracy(confusion_matrix),
@@ -372,7 +372,7 @@ plot_selected_metrics_over_cutoffs <- function(fitted_probabilities, y, selected
       calculate_diagnostic_odds_ratio(confusion_matrix)
     )
   }
-  
+
   # Plotting selected metrics
   for (metric in selected_metrics) {
     if (metric %in% colnames(metrics)) {
@@ -408,7 +408,7 @@ logits <- cbind(1, X) %*% beta_true
 prob <- 1 / (1 + exp(-logits))
 y <- rbinom(n, 1, prob)
 
-# Testing logistic_regression 
+# Testing logistic_regression
 logistic_model <- logistic_regression(X, y)
 print("Logistic Regression Model:")
 print(logistic_model) #$coefficients represents estimated betas
@@ -445,11 +445,11 @@ false_discovery_rate <- calculate_false_discovery_rate(conf_matrix)
 diagnostic_odds_ratio <- calculate_diagnostic_odds_ratio(conf_matrix)
 
 metrics_list <- list(
-  prevalence = prevalence, 
-  accuracy = accuracy, 
-  sensitivity = sensitivity, 
-  specificity = specificity, 
-  false_discovery_rate = false_discovery_rate, 
+  prevalence = prevalence,
+  accuracy = accuracy,
+  sensitivity = sensitivity,
+  specificity = specificity,
+  false_discovery_rate = false_discovery_rate,
   diagnostic_odds_ratio = diagnostic_odds_ratio
 )
 
