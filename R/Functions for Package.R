@@ -66,7 +66,7 @@ logistic_regression <- function(X, y, max_iter = 100, tol = 1e-6) {
 
 #' Initial Values for Logistic Regression Optimization
 #'
-#' Computes the initial values for the optimization of logistic regression coefficients using least squares.
+#' Computes the initial values for the optimization of logistic regression coefficients least-squares method.
 #'
 #' @param X A matrix of predictor variables.
 #' @param y A vector of response variables.
@@ -353,7 +353,7 @@ calculate_diagnostic_odds_ratio <- function(confusion_matrix) {
 
 #' Plot Selected Metrics Over Various Cutoff Values
 #'
-#' Plots selected metrics (e.g., accuracy, sensitivity) evaluated over a range of cutoff values.
+#' Plots selected metrics (i.e. Prevalence, Accuracy, Sensitivity, Specificity, False Discover Rate, Diagnostic Odds Ratio) evaluated over a range of cutoff values.
 #'
 #' @param fitted_probabilities Predicted probabilities from the logistic regression model.
 #' @param y True binary responses.
