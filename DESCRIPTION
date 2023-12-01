@@ -3,12 +3,12 @@ Type: Package
 Title: Logistic Regression Package
 Version: 0.1.0
 Authors@R: c(
-    person("Lucas", "Parvin", role = c("aut","cre")),
-    person("Priyadarshni", "Jitendrabhai Patel", role = c("aut","cre")),
-    person("Felix", "Satognon", role = c("aut","cre")))
+    person("Lucas", "Parvin", email = "lkp0038@auburn.edu", role = c("aut", "cre")),
+    person("Priyadarshni", "Jitendrabhai Patel", role = "aut"),
+    person("Felix", "Satognon", role = "aut"))
 Maintainer: Lucas Parvin <lkp0038@auburn.edu>
 Description: This package provides a solution for logistic regression using numerical optimization, distinct from pre-existing functions in R. It calculates the coefficient vector (beta) based on a logistic formula, beginning with initial values derived from the least-squares method. It can also generate bootstrap confidence intervals with user-defined parameters, plot the logistic curve, and create a confusion matrix with various predictive metrics, while enabling visualization of these metrics over a range of cut-off values.
-License: The “GNU Affero General Public License” version 3 (AGPL-3)
+License: GNU General Public License
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.3
