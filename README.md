@@ -49,7 +49,7 @@ prob <- 1 / (1 + exp(-logits))
 y <- rbinom(n, 1, prob)
 ```
 
-### **Logistic Regression Using Numerical Optimization `logistic_regression()`**
+### **Logistic Regression Using Numerical Optimization: `logistic_regression()`**
 
 This function performs logistic regression using numerical optimization.
 It does not rely on existing logistic regression functions in R.This
@@ -79,21 +79,22 @@ print(logistic_model)
     ## $iterations
     ## [1] 6
 
-### **Initial Values for Logistic Regression Optimization**
+##### *Interpretation*
 
-This function computes the initial values for the optimization of
+The above function yields estimated coefficients, log-likelihood, and
+the convergence iteration count. The coefficients indicate the influence
+of each predictor on the log odds of the outcome. A higher
+log-likelihood suggests a better model fit.
+
+### **Initial Values for Logistic Regression Optimization: `initial_values()`**
+
+The function above computes the initial values for the optimization of
 logistic regression coefficients using the least squares method.
 
 ##### *Example Usage*
 
 ``` r
 initial_beta <- initial_values(X, y)
-print("Initial Coefficients:")
-```
-
-    ## [1] "Initial Coefficients:"
-
-``` r
 print(initial_beta)# Obtain initial coefficients
 ```
 
@@ -102,7 +103,13 @@ print(initial_beta)# Obtain initial coefficients
     ## Predictor1 0.1424676
     ## Predictor2 0.2502480
 
-### **Bootstrap Confidence Intervals**
+##### *Interpretation*
+
+The function above provides starting coefficients for optimization,
+derived through a least squares method, impacting the function’s
+convergence and efficacy.
+
+### **Bootstrap Confidence Intervals: `bootstrap_ci()`**
 
 This function calculates bootstrap confidence intervals for logistic
 regression coefficients.
@@ -110,41 +117,7 @@ regression coefficients.
 ##### *Example Usage*
 
 ``` r
-ci <- bootstrap_ci(X, y)
-```
-
-    ## Convergence achieved after 6 iterations.
-
-    ## Convergence achieved after 7 iterations.
-
-    ## Convergence achieved after 6 iterations.
-    ## Convergence achieved after 6 iterations.
-    ## Convergence achieved after 6 iterations.
-    ## Convergence achieved after 6 iterations.
-    ## Convergence achieved after 6 iterations.
-    ## Convergence achieved after 6 iterations.
-    ## Convergence achieved after 6 iterations.
-    ## Convergence achieved after 6 iterations.
-    ## Convergence achieved after 6 iterations.
-
-    ## Convergence achieved after 7 iterations.
-    ## Convergence achieved after 7 iterations.
-
-    ## Convergence achieved after 6 iterations.
-    ## Convergence achieved after 6 iterations.
-    ## Convergence achieved after 6 iterations.
-    ## Convergence achieved after 6 iterations.
-    ## Convergence achieved after 6 iterations.
-    ## Convergence achieved after 6 iterations.
-    ## Convergence achieved after 6 iterations.
-
-``` r
-print("Bootstrap Confidence Intervals:")
-```
-
-    ## [1] "Bootstrap Confidence Intervals:"
-
-``` r
+ci <- suppressMessages(bootstrap_ci(X, y)) # You would just use bootstrap_ci(X, y). Messages suppressed here for concise documentation
 print(ci)
 ```
 
@@ -154,7 +127,13 @@ print(ci)
     ## $upper
     ## [1] -0.4117711  1.2630490  1.9080036
 
-### **Plotting the Fitted Logistic Regression Curve**
+##### *Interpretation*
+
+The function above generates confidence intervals that estimate the
+variability of logistic regression coefficients, indicating the probable
+ranges of the true parameter values.
+
+### **Plotting the Fitted Logistic Regression Curve: `plot_logistic_curve()`**
 
 This function plots the logistic regression curve based on fitted model
 coefficients.
@@ -168,7 +147,13 @@ plot_logistic_curve(X, y, logistic_model$coefficients, predictor_index = 1)
 
 ![](README_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
-### **Confusion Matrix and Metrics**
+##### *Interpretation*
+
+The function above yields a plot that displays the relationship between
+predictors and the estimated outcome probability, aiding in
+understanding predictor impacts.
+
+### **Confusion Matrix and Metrics: `calculate_confusion_matrix()`**
 
 Calculate and display the confusion matrix and various metrics.
 
@@ -177,12 +162,6 @@ Calculate and display the confusion matrix and various metrics.
 ``` r
 fitted_probabilities <- 1 / (1 + exp(-cbind(1, X) %*% logistic_model$coefficients))
 conf_matrix <- calculate_confusion_matrix(y, ifelse(fitted_probabilities > 0.5, 1, 0))
-print("Confusion Matrix:")
-```
-
-    ## [1] "Confusion Matrix:"
-
-``` r
 print(conf_matrix)
 ```
 
@@ -190,6 +169,10 @@ print(conf_matrix)
     ## y     0   1
     ##   0 141  32
     ##   1  43  84
+
+##### **The Metrics:**
+
+###### **`calculate_prevalence()`, `calculate_accuracy()`, `calculate_sensitivity()`, `calculate_specificity()`, `calculate_false_discovery_rate()`, `calculate_diagnostic_odds_ratio()`**
 
 ``` r
 metrics_list <- list(
@@ -201,12 +184,6 @@ metrics_list <- list(
   diagnostic_odds_ratio = calculate_diagnostic_odds_ratio(conf_matrix)
 )
 
-print("Metrics:")
-```
-
-    ## [1] "Metrics:"
-
-``` r
 print(metrics_list)
 ```
 
@@ -228,7 +205,14 @@ print(metrics_list)
     ## $diagnostic_odds_ratio
     ## [1] 8.607558
 
-### **Plot Selected Metrics Over Various Cutoff Values**
+##### *Interpretation*
+
+The functions above generate a confusion matrix that contrasts the
+actual and predicted outcomes, assessing prediction accuracy. Metrics
+like prevalence, accuracy, sensitivity, and others offer a multi-faceted
+performance evaluation.
+
+### **Plot Selected Metrics Over Various Cutoff Values: `plot_selected_metrics_over_cutoffs()`**
 
 This function plots selected metrics (e.g., accuracy, sensitivity)
 evaluated over a range of cutoff values. It specifies metrics of
@@ -244,4 +228,9 @@ for (metric in metrics_names) {
 }
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->![](README_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->![](README_files/figure-gfm/unnamed-chunk-8-3.png)<!-- -->![](README_files/figure-gfm/unnamed-chunk-8-4.png)<!-- -->![](README_files/figure-gfm/unnamed-chunk-8-5.png)<!-- -->![](README_files/figure-gfm/unnamed-chunk-8-6.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->![](README_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->![](README_files/figure-gfm/unnamed-chunk-9-3.png)<!-- -->![](README_files/figure-gfm/unnamed-chunk-9-4.png)<!-- -->![](README_files/figure-gfm/unnamed-chunk-9-5.png)<!-- -->![](README_files/figure-gfm/unnamed-chunk-9-6.png)<!-- -->
+
+##### *Interpretation*
+
+The plots generated by the function above demonstrate how different
+probability thresholds affect model performance metrics.
