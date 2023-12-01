@@ -14,10 +14,10 @@ output: github_document
 ## **Accessing The Package**
 
 1. Users need to install the "devtools" package first, if not already installed, using: `install.packages("devtools")`
-2.Once "devtools" is installed, it needs to be loaded into the R environment using: `library(devtools)`
+2. Once "devtools" is installed, it needs to be loaded into the R environment using: `library(devtools)`
 3. The final project package is hosted on GitHub. Users can install it using: `devtools::install_github("R-4-Data-Science/FinalProject_Group8")`
 
-## Finally, load our package:
+**Finally, load our package:**
 
 ```{r}
 library(package8)

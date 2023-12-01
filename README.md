@@ -1,7 +1,7 @@
 Logistic Regression Package - Group 8
 ================
 Lucas Parvin, Priyadarshni Jitendrabhai Patel, & Felix Satognon
-2023-11-30
+2023-12-01
 
 - ChatGPT was utilized in the creation of this package:
   <https://chat.openai.com/share/cbb8309e-df87-444a-974e-09e9f0cb91ff>
@@ -14,13 +14,15 @@ Lucas Parvin, Priyadarshni Jitendrabhai Patel, & Felix Satognon
 
 ## **Accessing The Package**
 
-1.  To install the package, you must first install “devtools” if you
-    have not already: `install.packages("devtools")`
-2.  Load devtools using: `library(devtools)`
-3.  Now run
+1.  Users need to install the “devtools” package first, if not already
+    installed, using: `install.packages("devtools")`
+2.  Once “devtools” is installed, it needs to be loaded into the R
+    environment using: `library(devtools)`
+3.  The final project package is hosted on GitHub. Users can install it
+    using:
     `devtools::install_github("R-4-Data-Science/FinalProject_Group8")`
 
-Finally, load our package:
+**Finally, load our package:**
 
 ``` r
 library(package8)
@@ -50,7 +52,8 @@ y <- rbinom(n, 1, prob)
 ### **Logistic Regression Using Numerical Optimization `logistic_regression()`**
 
 This function performs logistic regression using numerical optimization.
-It does not rely on existing logistic regression functions in R.
+It does not rely on existing logistic regression functions in R.This
+function is independent of existing logistic regression functions in R.
 
 ##### *Example Usage*
 
@@ -91,7 +94,7 @@ print("Initial Coefficients:")
     ## [1] "Initial Coefficients:"
 
 ``` r
-print(initial_beta)
+print(initial_beta)# Obtain initial coefficients
 ```
 
     ##                 [,1]
@@ -228,7 +231,9 @@ print(metrics_list)
 ### **Plot Selected Metrics Over Various Cutoff Values**
 
 This function plots selected metrics (e.g., accuracy, sensitivity)
-evaluated over a range of cutoff values.
+evaluated over a range of cutoff values. It specifies metrics of
+interest, like prevalence or sensitivity, and visualize them over
+varying cutoff values.
 
 ##### *Example Usage*
 
